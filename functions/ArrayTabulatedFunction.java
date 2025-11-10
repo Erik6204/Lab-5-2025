@@ -53,7 +53,7 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable, 
         }
         
         for (int i = 1; i < points.length; i++) {
-            if (points[i].getX() <= points[i-1].getX()) {
+            if (points[i].getX() - points[i-1].getX() <= 1e-10) {
                 throw new IllegalArgumentException("Точки не упорядочены по возрастанию x");
             }
         }
@@ -108,10 +108,10 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable, 
             throw new FunctionPointIndexOutOfBoundsException("Индекс " + index + " выходит за границы [0, " + (pointsCount-1) + "]");
         }
         
-        if (index > 0 && point.getX() <= points[index - 1].getX()) {
+        if (index > 0 && point.getX() - points[index - 1].getX() <= 1e-10)  {
             throw new InappropriateFunctionPointException("X координата точки нарушает упорядоченность с предыдущей точкой");
         }
-        if (index < pointsCount - 1 && point.getX() >= points[index + 1].getX()) {
+        if (index < pointsCount - 1 && point.getX() >= points[index + 1].getX() - 1e-10) {
             throw new InappropriateFunctionPointException("X координата точки нарушает упорядоченность со следующей точкой");
         }
 
@@ -130,10 +130,10 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable, 
             throw new FunctionPointIndexOutOfBoundsException("Индекс " + index + " выходит за границы [0, " + (pointsCount-1) + "]");
         }
         
-        if (index > 0 && x <= points[index - 1].getX()) {
+        if (index > 0 && x <= points[index - 1].getX() + 1e-10) {
             throw new InappropriateFunctionPointException("X координата точки нарушает упорядоченность с предыдущей точкой");
         }
-        if (index < pointsCount - 1 && x >= points[index + 1].getX()) {
+        if (index < pointsCount - 1 && x >= points[index + 1].getX() - 1e-10) {
             throw new InappropriateFunctionPointException("X координата точки нарушает упорядоченность со следующей точкой");
         }
 
@@ -244,7 +244,6 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable, 
         
         return true;// Если все проверки пройдены - true
     }
-    
     @Override
     public int hashCode() {
         int hash = pointsCount;

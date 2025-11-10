@@ -64,7 +64,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Serializa
         }
         
         for (int i = 1; i < points.length; i++) {
-            if (points[i].getX() <= points[i-1].getX()) {
+            if (points[i].getX() <= points[i-1].getX() + 1e-10) {
                 throw new IllegalArgumentException("Точки не упорядочены по возрастанию x");
             }
         }
@@ -107,7 +107,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Serializa
         FunctionNode node = getNodeByIndex(index);
 
         double x = point.getX();
-        if ((index > 0 && x <= node.prev.point.getX()) || (index < size - 1 && x >= node.next.point.getX())) {
+        if ((index > 0 && x <= node.prev.point.getX() + 1e-10) || (index < size - 1 && x >= node.next.point.getX() - 1e-10)) {
             throw new InappropriateFunctionPointException("X координата точки нарушает упорядоченность");
         }
 
@@ -125,7 +125,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Serializa
             throw new FunctionPointIndexOutOfBoundsException();
         }
         FunctionNode node = getNodeByIndex(index);
-        if ((index > 0 && x <= node.prev.point.getX()) || (index < size - 1 && x >= node.next.point.getX())) {
+        if ((index > 0 && x <= node.prev.point.getX() + 1e-10) || (index < size - 1 && x >= node.next.point.getX() - 1e-10)) {
             throw new InappropriateFunctionPointException("X координата точки нарушает упорядоченность");
         }
         node.point.setX(x);
@@ -238,12 +238,9 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Serializa
         }
         return current;
     }
-
-    // Добавление точки в конец и возвращение ссылки на этот объект
     private FunctionNode addNodeToTail() {
         FunctionNode newNode = new FunctionNode(null);
         FunctionNode last = head.prev;
-
         last.next = newNode;
         newNode.prev = last;
         newNode.next = head;
@@ -252,8 +249,6 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Serializa
         size++;
         return newNode;
     }
-
-    // Добавление элемента в список по индексу и возвращение ссылки на объект этого элемента
     private FunctionNode addNodeByIndex(int index) {
         if (index == size) return addNodeToTail();
         FunctionNode nextNode = getNodeByIndex(index);
@@ -267,8 +262,6 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Serializa
         size++;
         return newNode;
     }
-
-    // Удаление элемента в списке по индексу
     private FunctionNode deleteNodeByIndex(int index) {
         FunctionNode node = getNodeByIndex(index);
         node.prev.next = node.next;
@@ -276,16 +269,11 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Serializa
         size--;
         return node;
     }
-
-    // Метод вывода
     public void printTabulatedFunction() {
         for (int i = 0; i < size; i++) {
             System.out.println("x = " + getPointX(i) + ", y = " + getPointY(i));
         }
     }
-    
-    // 3(переопределение методов)
-    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -323,7 +311,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Serializa
                 currentThis = currentThis.next;
                 currentThat = currentThat.next;
             }
-        } else {// Общий случай для других реализаций TabulatedFunction
+        } else {
             for (int i = 0; i < getPointsCount(); i++) {
                 if (!this.getPoint(i).equals(that.getPoint(i))) {
                     return false;
@@ -333,7 +321,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Serializa
         
         return true;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = getPointsCount();
@@ -348,13 +336,20 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Serializa
     @Override
     public Object clone() {
         LinkedListTabulatedFunction cloned = new LinkedListTabulatedFunction();
-        
         FunctionNode current = head.next;
+        FunctionNode clonedCurrent = cloned.head;
+        
         while (current != head) {
-            FunctionNode newNode = cloned.addNodeToTail();
-            newNode.point = (FunctionPoint) current.point.clone();
+            FunctionNode newNode = new FunctionNode((FunctionPoint) current.point.clone());
+            clonedCurrent.next = newNode;
+            newNode.prev = clonedCurrent;
+            clonedCurrent = newNode;
             current = current.next;
         }
+        
+        clonedCurrent.next = cloned.head;
+        cloned.head.prev = clonedCurrent;
+        cloned.size = this.size;
         
         return cloned;
     }

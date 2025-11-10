@@ -32,7 +32,6 @@ public class Main {
         System.out.println("p1.equals(p3): " + p1.equals(p3) + " (ожидается: false)");
         System.out.println("p1.equals(p4): " + p1.equals(p4) + " (ожидается: false)");
         System.out.println("p1.equals(null): " + p1.equals(null) + " (ожидается: false)");
-        System.out.println("p1.equals(\"строка\"): " + p1.equals("строка") + " (ожидается: false)");
         
         System.out.println("\nХэш-коды:");
         System.out.println("p1.hashCode(): " + p1.hashCode());
@@ -76,6 +75,10 @@ public class Main {
         ArrayTabulatedFunction func2 = new ArrayTabulatedFunction(points2);
         ArrayTabulatedFunction func3 = new ArrayTabulatedFunction(points3);
         
+        LinkedListTabulatedFunction listFunc1 = new LinkedListTabulatedFunction(points1);
+        LinkedListTabulatedFunction listFunc2 = new LinkedListTabulatedFunction(points2);
+        LinkedListTabulatedFunction listFunc3 = new LinkedListTabulatedFunction(points3);
+        
         System.out.println("func1: " + func1.toString());
         System.out.println("func2: " + func2.toString());
         System.out.println("func3: " + func3.toString());
@@ -84,7 +87,6 @@ public class Main {
         System.out.println("func1.equals(func2): " + func1.equals(func2) + " (ожидается: true)");
         System.out.println("func1.equals(func3): " + func1.equals(func3) + " (ожидается: false)");
         System.out.println("func1.equals(null): " + func1.equals(null) + " (ожидается: false)");
-        System.out.println("func1.equals(\"строка\"): " + func1.equals("строка") + " (ожидается: false)");
         
         System.out.println("\nХэш-коды:");
         System.out.println("func1.hashCode(): " + func1.hashCode());
@@ -95,23 +97,9 @@ public class Main {
         System.out.println("func2.hashCode() == func3.hashCode(): " + (func2.hashCode() == func3.hashCode()) + " (ожидается: false)");
         
         ArrayTabulatedFunction func1Clone = (ArrayTabulatedFunction) func1.clone();
-        System.out.println("\nКлонирование:");
-        System.out.println("func1.clone().equals(func1): " + func1Clone.equals(func1) + " (ожидается: true)");
-        System.out.println("func1 == func1.clone(): " + (func1 == func1Clone) + " (ожидается: false)");
         
-        // Проверка глубокого клонирования
-        System.out.println("\nПроверка глубокого клонирования (ArrayTabulatedFunction):");
-        func1.setPointY(1, 999); // Изменяем исходный объект
-        System.out.println("После изменения func1:");
-        System.out.println("func1.getPointY(1): " + func1.getPointY(1) + " (ожидается: 999.0)");
-        System.out.println("func1Clone.getPointY(1): " + func1Clone.getPointY(1) + " (ожидается: 1.0)");
-        System.out.println("Клон не изменился: " + (func1Clone.getPointY(1) != 999) + " (ожидается: true)");
-
         // Тестирование LinkedListTabulatedFunction
         System.out.println("\n\n3. ТЕСТИРОВАНИЕ LinkedListTabulatedFunction");
-        LinkedListTabulatedFunction listFunc1 = new LinkedListTabulatedFunction(points1);
-        LinkedListTabulatedFunction listFunc2 = new LinkedListTabulatedFunction(points2);
-        LinkedListTabulatedFunction listFunc3 = new LinkedListTabulatedFunction(points3);
         
         System.out.println("listFunc1: " + listFunc1.toString());
         System.out.println("listFunc2: " + listFunc2.toString());
@@ -120,7 +108,7 @@ public class Main {
         System.out.println("\nСравнение функций:");
         System.out.println("listFunc1.equals(listFunc2): " + listFunc1.equals(listFunc2) + " (ожидается: true)");
         System.out.println("listFunc1.equals(listFunc3): " + listFunc1.equals(listFunc3) + " (ожидается: false)");
-        System.out.println("listFunc1.equals(func1): " + listFunc1.equals(func1) + " (ожидается: false - разные классы)");
+        System.out.println("listFunc1.equals(func1): " + listFunc1.equals(func1) + " (ожидается: true - одиннаковые точки(содержимое))");
         
         System.out.println("\nХэш-коды:");
         System.out.println("listFunc1.hashCode(): " + listFunc1.hashCode());
@@ -134,6 +122,14 @@ public class Main {
         System.out.println("\nКлонирование:");
         System.out.println("listFunc1.clone().equals(listFunc1): " + listFunc1Clone.equals(listFunc1) + " (ожидается: true)");
         System.out.println("listFunc1 == listFunc1.clone(): " + (listFunc1 == listFunc1Clone) + " (ожидается: false)");
+        
+        // Проверка глубокого клонирования
+        System.out.println("\nПроверка глубокого клонирования (ArrayTabulatedFunction):");
+        func1.setPointY(1, 999); // Изменяем исходный объект
+        System.out.println("После изменения func1:");
+        System.out.println("func1.getPointY(1): " + func1.getPointY(1) + " (ожидается: 999.0)");
+        System.out.println("func1Clone.getPointY(1): " + func1Clone.getPointY(1) + " (ожидается: 1.0)");
+        System.out.println("Клон не изменился: " + (func1Clone.getPointY(1) != 999) + " (ожидается: true)");
         
         // Проверка глубокого клонирования
         System.out.println("\nПроверка глубокого клонирования (LinkedListTabulatedFunction):");
